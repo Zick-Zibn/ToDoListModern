@@ -17,6 +17,11 @@
             <artifactId>spring-context</artifactId>
             <version>6.2.5</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>1.3.5</version> <!-- или 2.1.1 для Jakarta 9+ -->
+        </dependency>
     </dependencies>
 
 </project>
