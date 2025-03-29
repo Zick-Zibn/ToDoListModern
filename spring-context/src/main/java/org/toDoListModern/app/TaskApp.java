@@ -1,17 +1,14 @@
-package org.ToDoListModern;
+package org.toDoListModern.app;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Scanner;
 
 public class TaskApp {
-    private final TaskRepository taskRepository;
-    private final TaskPrinter taskPrinter;
-
-    public TaskApp(TaskRepository taskRepository, TaskPrinter taskPrinter) {
-        this.taskRepository = taskRepository;
-        this.taskPrinter = taskPrinter;
-    }
+    @Autowired
+    private TaskRepository taskRepository;
+    @Autowired
+    private TaskPrinter taskPrinter;
 
     public void run() {
 

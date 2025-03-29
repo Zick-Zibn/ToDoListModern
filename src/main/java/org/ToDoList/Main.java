@@ -1,4 +1,4 @@
-package org.ToDoList;
+package org.toDoListModern;
 
 public class Main {
     public static void main(String[] args) {

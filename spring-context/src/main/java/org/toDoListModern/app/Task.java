@@ -1,4 +1,4 @@
-package org.ToDoListModern;
+package org.toDoListModern.app;
 
 public class Task {
     private final int idTask;

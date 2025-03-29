@@ -1,8 +1,10 @@
-package org.ToDoListModern;
+package org.toDoListModern.app;
 
+import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class TaskRepository {
     private final List<Task> tasksList = new ArrayList<>();
     private int idTask = 0;
