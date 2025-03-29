@@ -1,63 +1,54 @@
 package org.toDoListModern.app;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.toDoListModern.app.command.CommandHandler;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class TaskApp {
+
+    private final Map<Integer, CommandHandler> commandHandlers;
+
     @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private TaskPrinter taskPrinter;
+    public TaskApp(List<CommandHandler> commandHandlers) {
+        this.commandHandlers = commandHandlers.stream()
+                .collect(
+                        Collectors.toMap(
+                                CommandHandler::getKey,
+                                handler -> handler
+                        )
+                );
+    }
 
     public void run() {
-
         Scanner scanner = new Scanner(System.in);
-        int numMenuChoice = 0;
-
         System.out.println("Добро пожаловать в TaskApp!");
 
         do {
-            this.printMenu();
-
-            numMenuChoice = scanner.nextInt();
-            switch (numMenuChoice) {
-                case 1:
-                    System.out.println("Ваш выбор: 1");
-                    System.out.print("Введите описание задачи: ");
-                    String taskName = scanner.next();
-                    taskRepository.addTask(taskName);
-                    System.out.printf("Задача добавлена с ID = %s \n", taskRepository.getIdTask());
-                    this.printEmptyLine();
-                    break;
-                case 2:
-                    System.out.println("Ваш выбор: 2");
-                    System.out.println("Список задач:");
-                    taskPrinter.printTasks(taskRepository.getTasksList());
-                    this.printEmptyLine();
-                    break;
-                case 3:
-                    System.out.print("Введите ID задачи для удаления: ");
-                    int idTask = scanner.nextInt();
-                    taskRepository.removeTask(idTask);
-                    this.printEmptyLine();
-                    break;
-                case 0:
-                    System.out.println("Выход из приложения. До свидания!");
-                    break;
+            printMenu();
+            int numMenuChoice = scanner.nextInt();
+            if (numMenuChoice == 0) {
+                System.out.println("Выход из приложения. До свидания!");
+                return;
             }
-
-        } while (numMenuChoice != 0);
+            if (!commandHandlers.containsKey(numMenuChoice)) {
+                System.out.println("Нет команды с таким кодом");
+                continue;
+            }
+            commandHandlers.get(numMenuChoice).handle();
+            System.out.println();
+        } while (true);
     }
 
     private void printMenu() {
         System.out.println("Выберите действие:");
-        System.out.println("1 - Добавить задачу");
-        System.out.println("2 - Показать все задачи");
-        System.out.println("3 - Удалить задачу");
+        commandHandlers.values()
+                .forEach(handler ->
+                        System.out.printf("%d - %s%n", handler.getKey(), handler.getDescription())
+                );
         System.out.println("0 - Выйти");
-    }
-    private void printEmptyLine() {
-        System.out.println();
     }
 }
